@@ -7,7 +7,7 @@ import {
 } from '../../api/productsApi';
 import { PageHeader } from '../../components/layout/PageHeader';
 import { Button } from '../../components/ui/Button';
-import { LoadingSpinner } from '../../components/ui/LoadingSpinner';
+import { PageLoader } from '../../components/ui/LoadingSpinner';
 import { Pagination } from '../../components/ui/Pagination';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { ProductFilters } from './ProductFilters';
@@ -84,17 +84,28 @@ export function InventoryPage() {
 
   if (error) {
     return (
-      <div className="text-center py-12">
-        <p className="text-red-500">Failed to load products</p>
+      <div className="glass-card p-8 text-center">
+        <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-accent-rose/10 flex items-center justify-center">
+          <svg className="w-8 h-8 text-accent-rose" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+          </svg>
+        </div>
+        <h3 className="text-lg font-display font-semibold text-surface-200 mb-2">Failed to load products</h3>
+        <p className="text-surface-400">Please try refreshing the page</p>
       </div>
     );
   }
 
   return (
     <div>
-      <PageHeader title="Inventory">
+      <PageHeader title="Inventory" subtitle="Manage your product catalog">
         {isAdmin && (
-          <Button onClick={handleAdd}>Add Product</Button>
+          <Button onClick={handleAdd}>
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            Add Product
+          </Button>
         )}
       </PageHeader>
 
@@ -108,21 +119,26 @@ export function InventoryPage() {
       />
 
       {isLoading ? (
-        <div className="flex justify-center items-center h-64">
-          <LoadingSpinner size="lg" />
-        </div>
+        <PageLoader />
       ) : products.length === 0 ? (
-        <EmptyState
-          title="No products found"
-          message="Try adjusting your filters or add a new product."
-          action={
-            isAdmin && (
-              <Button onClick={handleAdd}>Add Product</Button>
-            )
-          }
-        />
+        <div className="glass-card">
+          <EmptyState
+            title="No products found"
+            message="Try adjusting your filters or add a new product to get started."
+            action={
+              isAdmin && (
+                <Button onClick={handleAdd}>
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                  </svg>
+                  Add Product
+                </Button>
+              )
+            }
+          />
+        </div>
       ) : (
-        <>
+        <div className="glass-card overflow-hidden">
           <ProductTable
             products={products}
             onEdit={handleEdit}
@@ -134,7 +150,7 @@ export function InventoryPage() {
             total={pagination.total}
             onPageChange={setPage}
           />
-        </>
+        </div>
       )}
 
       <ProductFormModal

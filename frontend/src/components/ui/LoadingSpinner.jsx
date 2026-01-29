@@ -7,9 +7,24 @@ export function LoadingSpinner({ size = 'md', className = '' }) {
 
   return (
     <div className={`flex justify-center items-center ${className}`}>
-      <div
-        className={`${sizes[size]} animate-spin rounded-full border-2 border-gray-300 border-t-blue-600`}
-      />
+      <div className="relative">
+        <div
+          className={`${sizes[size]} animate-spin rounded-full border-2 border-surface-700 border-t-accent-emerald`}
+        />
+        <div
+          className={`${sizes[size]} absolute inset-0 animate-spin rounded-full border-2 border-transparent border-r-accent-cyan opacity-50`}
+          style={{ animationDirection: 'reverse', animationDuration: '1.5s' }}
+        />
+      </div>
+    </div>
+  );
+}
+
+export function PageLoader() {
+  return (
+    <div className="flex flex-col items-center justify-center py-20">
+      <LoadingSpinner size="lg" />
+      <p className="mt-4 text-sm text-surface-400 animate-pulse">Loading...</p>
     </div>
   );
 }

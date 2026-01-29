@@ -62,128 +62,146 @@ export function ProductFormModal({ isOpen, onClose, product, onSubmit, isLoading
       isOpen={isOpen}
       onClose={onClose}
       title={isEditing ? 'Edit Product' : 'Add Product'}
+      size="lg"
     >
-      <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Name *
-          </label>
-          <input
-            type="text"
-            {...register('name', { required: 'Name is required' })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          {errors.name && (
-            <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
-          )}
+      <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div>
+            <label className="block text-sm font-medium text-surface-300 mb-2">
+              Name <span className="text-accent-rose">*</span>
+            </label>
+            <input
+              type="text"
+              {...register('name', { required: 'Name is required' })}
+              className={`input-glass ${errors.name ? 'border-accent-rose/50' : ''}`}
+              placeholder="Product name"
+            />
+            {errors.name && (
+              <p className="mt-2 text-sm text-accent-rose">{errors.name.message}</p>
+            )}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-surface-300 mb-2">
+              SKU <span className="text-accent-rose">*</span>
+            </label>
+            <input
+              type="text"
+              {...register('sku', { required: 'SKU is required' })}
+              disabled={isEditing}
+              className={`input-glass ${errors.sku ? 'border-accent-rose/50' : ''} ${isEditing ? 'opacity-60 cursor-not-allowed' : ''}`}
+              placeholder="PRD-001"
+            />
+            {errors.sku && (
+              <p className="mt-2 text-sm text-accent-rose">{errors.sku.message}</p>
+            )}
+          </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            SKU *
-          </label>
-          <input
-            type="text"
-            {...register('sku', { required: 'SKU is required' })}
-            disabled={isEditing}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
-          />
-          {errors.sku && (
-            <p className="mt-1 text-sm text-red-600">{errors.sku.message}</p>
-          )}
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-surface-300 mb-2">
             Description
           </label>
           <textarea
             {...register('description')}
             rows={3}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="input-glass resize-none"
+            placeholder="Optional product description..."
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Category *
+          <label className="block text-sm font-medium text-surface-300 mb-2">
+            Category <span className="text-accent-rose">*</span>
           </label>
-          <select
-            {...register('category', { required: 'Category is required' })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            {CATEGORIES.map((cat) => (
-              <option key={cat.value} value={cat.value}>
-                {cat.label}
-              </option>
-            ))}
-          </select>
-          {errors.category && (
-            <p className="mt-1 text-sm text-red-600">{errors.category.message}</p>
-          )}
+          <div className="relative">
+            <select
+              {...register('category', { required: 'Category is required' })}
+              className="input-glass appearance-none cursor-pointer pr-10"
+            >
+              {CATEGORIES.map((cat) => (
+                <option key={cat.value} value={cat.value} className="bg-surface-800">
+                  {cat.label}
+                </option>
+              ))}
+            </select>
+            <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-surface-400">
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+              </svg>
+            </div>
+          </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Quantity *
+            <label className="block text-sm font-medium text-surface-300 mb-2">
+              Quantity <span className="text-accent-rose">*</span>
             </label>
             <input
               type="number"
               {...register('quantity', {
-                required: 'Quantity is required',
-                min: { value: 0, message: 'Must be 0 or more' },
+                required: 'Required',
+                min: { value: 0, message: 'Must be 0+' },
               })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={`input-glass ${errors.quantity ? 'border-accent-rose/50' : ''}`}
+              placeholder="0"
             />
             {errors.quantity && (
-              <p className="mt-1 text-sm text-red-600">{errors.quantity.message}</p>
+              <p className="mt-2 text-sm text-accent-rose">{errors.quantity.message}</p>
             )}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Price *
+            <label className="block text-sm font-medium text-surface-300 mb-2">
+              Price <span className="text-accent-rose">*</span>
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-surface-400">
+                $
+              </div>
+              <input
+                type="number"
+                step="0.01"
+                {...register('price', {
+                  required: 'Required',
+                  min: { value: 0, message: 'Must be 0+' },
+                })}
+                className={`input-glass pl-7 ${errors.price ? 'border-accent-rose/50' : ''}`}
+                placeholder="0.00"
+              />
+            </div>
+            {errors.price && (
+              <p className="mt-2 text-sm text-accent-rose">{errors.price.message}</p>
+            )}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-surface-300 mb-2">
+              Low Stock Alert
             </label>
             <input
               type="number"
-              step="0.01"
-              {...register('price', {
-                required: 'Price is required',
-                min: { value: 0, message: 'Must be 0 or more' },
+              {...register('lowStockThreshold', {
+                min: { value: 0, message: 'Must be 0+' },
               })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={`input-glass ${errors.lowStockThreshold ? 'border-accent-rose/50' : ''}`}
+              placeholder="10"
             />
-            {errors.price && (
-              <p className="mt-1 text-sm text-red-600">{errors.price.message}</p>
+            {errors.lowStockThreshold && (
+              <p className="mt-2 text-sm text-accent-rose">
+                {errors.lowStockThreshold.message}
+              </p>
             )}
           </div>
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Low Stock Threshold
-          </label>
-          <input
-            type="number"
-            {...register('lowStockThreshold', {
-              min: { value: 0, message: 'Must be 0 or more' },
-            })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          {errors.lowStockThreshold && (
-            <p className="mt-1 text-sm text-red-600">
-              {errors.lowStockThreshold.message}
-            </p>
-          )}
-        </div>
-
-        <div className="flex justify-end gap-3 pt-4">
+        <div className="flex justify-end gap-3 pt-4 border-t border-surface-700/50">
           <Button variant="secondary" onClick={onClose} type="button">
             Cancel
           </Button>
-          <Button type="submit" disabled={isLoading}>
-            {isLoading ? 'Saving...' : isEditing ? 'Update' : 'Create'}
+          <Button type="submit" loading={isLoading}>
+            {isEditing ? 'Update Product' : 'Create Product'}
           </Button>
         </div>
       </form>
